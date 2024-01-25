@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinycolor/1.4.1/tinycolor.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/album-art"></script> <!--앨범아트 불러오가-->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.min.js"></script> <!--앨범아트로부터 평균값을 추출할 수 있도록 해주는 라이브러리-->
+</head>
+<body style="background-color: #121212; margin: 0px;">
+    <div style="width: 1920px; height: 100%;;">
+        <div style="margin-top: 16px;">
+            <!-- c-1 -->
+            <div style="margin-left: 54px; margin-top: 40px; width: 696px; height: 870px; float: left">
+                <div id="capture" class="post">
+                    <div id="general" style="display: flex; flex-direction: column; height: 870px; width: 696px;">
+                        <div id="writer-result" class="post-writer is-gray">익명</div>
+                        <div id="posttext" class="post-text up42px">
+                            <span id="sayeon-result" class="post-sayeon">“손전등과 벽면 사이에 가림판을 설치하고 그 가림판에 가늘고 기다란 구멍을 뚫는다(A슬릿이라고 부른다). 그럼 가림판의 A슬릿을 빠져나온 빛은 벽면에 길다란 한줄의 빛줄기를 남길 것이다. 만약 그 구멍옆에 똑같은 구멍(B슬릿이라고 부른다)을 하나 더 뚫는다면, 벽면에는 여러 줄의 불빛이 생긴다. 이는 파동이 서로 간섭하는 현상에 의해 발생하는 것으로, A슬릿과 B슬릿을 동시에 통과한 불빛들이 서로 간섭을 하여, 그 결과로 벽면에 간섭 불빛이 남은 것이다. 즉, 벽면에 비치는 여러 줄의 간섭 불빛을 통해 빛이 파동임을 확실하게 증명한다.”</span>
+                            <span id="content-result" class="post-content">위의 전자빔발사기에서 전자다발들이 아니라 전자를 한 번에 하나씩 불연속적으로 발사한다면, 어김없이 감광판엔 간섭 무늬가 남는다. 여기서 이를 통해 전자다발들 혹은 연속적인 전자들의 흐름만이 파동이 아니라, 애초에 각각의 전자 하나 하나가 그 자체로 입자이면서 동시에 파동임을 알 수 있다.</span>
+                        </div>
+                        <div class="post-music" id="postmusic">
+                            <div id="postAlbumart" class="post-music-photo"></div>
+                            <div style="margin-left: 14px;">
+                                <p id="title-result" class="post-music-title">Ditto</p>
+                                <p id="artist-result" class="post-music-artist">Newjeans</p>
+                            </div>
+                        </div>
+                        <div class="post-next" id="nextpost">
+                            <img src="src/post_next.svg" style="height: 30px; margin: auto;">
+                        </div>
+                    </div>
+                    <div id="cover" hidden; style="position: relative; display: none;">
+                        <img src="src/cover_temp.jpg" style="width: 696px;">
+                        <p class="cover-title" id="date-result">날짜 입력</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- c-2 -->
+            <div style="margin-left: 80px; width: 548px; height: 870px; float: left">
+                <div>
+                    <h1 class="float-left">사연</h1>
+                    <div id="clearsayeon" onclick="clearsayeon()" class="btn float-right">모두 지우기</div>
+                </div>
+                <div class="input"> 
+                    <textarea id="sayeon" oninput='printsayeon()' type="text" class="input-msg" placeholder="Ctrl + V로 붙여넣기 또는 직접 입력"></textarea>
+                </div>
+                <div class="m-36"></div>
+                <div>
+                    <h1 class="float-left">본문</h1>
+                    <div id="clearcontent" onclick="clearcontent()" class="btn float-right">모두 지우기</div>
+                </div>
+                <div class="input"> 
+                    <textarea id="content" oninput='printcontent()' type="text" class="input-msg" placeholder="Ctrl + V로 붙여넣기 또는 직접 입력"></textarea>
+                </div>
+            </div>
+
+            <!-- c-3 -->
+            <div style="margin-left: 60px; width: 428px; height: 870px; float: left">
+                <div>
+                    <h1 class="float-left">음악</h1>
+                    <div class="btn float-right" onclick="getAlbumart()">앨범아트 자동 불러오기</div>
+                </div>
+                <div style="margin-top: 62px;">
+                    <p class="float-left" style="margin-top: 8px;">제목</p>
+                    <div class="input-350"> 
+                        <textarea id="title" oninput='printtitle()' type="text" class="input-msg" placeholder="Ditto" onkeydown="return event.key !== 'Enter';"></textarea>
+                    </div>
+                </div>
+                <div style="margin-top: 110px;">
+                    <p class="float-left" style="margin-top: 8px;">아티스트</p>
+                    <div class="input-350"> 
+                        <textarea id="artist" oninput='printartist()' type="text" class="input-msg" placeholder="Newjeans" onkeydown="return event.key !== 'Enter';"></textarea>
+                    </div>
+                </div>
+                <div class="music">
+                    <div id="previewAlbumart" class="music-photo"></div>
+                    <div style="margin-left: 14px;">
+                        <p id="title-preview" class="music-title">Ditto</p>
+                        <p id="artist-preview" class="music-artist">Newjeans</p>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="float-left">앨범아트 수동 업로드</h1>
+                    <button id="uploadButton" class="btn">앨범아트 수동 불러오기</button>
+                    <input type="file" id="albumArtUpload" class="btn" accept="image/*" style="display: none;" />
+                </div>
+                
+                <div class="m-36"></div>
+
+                <div>
+                    <h1 class="float-left">사연자</h1>
+                    <div id="clearwriter" onclick="clearwriter()" class="btn float-right">모두 지우기</div>
+                </div>
+                <div style="margin-top: 62px;">
+                    <!-- 라디오버튼 -->
+                    <div class="button-container">
+                        <div>
+                            <input type="radio" name="colors" value="is-gray" class="radio-button" onchange="changeColor(this)" id="size1" checked>
+                            <label for="size1"></label>
+                        
+                            <input type="radio" name="colors" value="is-blue" class="radio-button" onchange="changeColor(this)" id="size2">
+                            <label for="size2"></label>
+                        
+                            <input type="radio" name="colors" value="is-yellow" class="radio-button" onchange="changeColor(this)" id="size3">
+                            <label for="size3"></label>
+                        
+                            <input type="radio" name="colors" value="is-green" class="radio-button" onchange="changeColor(this)" id="size4">
+                            <label for="size4"></label>
+                        
+                            <input type="radio" name="colors" value="is-red" class="radio-button" onchange="changeColor(this)" id="size5">
+                            <label for="size5"></label>
+                        </div>
+                    </div>
+                    <div class="input-220"> 
+                        <input id="writer" list="writers" oninput='printwriter()' type="text" class="input-msg" placeholder="익명"></input>
+                        <datalist id="writers">
+                            <option value="익명"></option>
+                            <option value="익명 남학생"></option>
+                            <option value="익명 여학생"></option>
+                            <option value="1학년"></option>
+                            <option value="1학년 남학생"></option>
+                            <option value="1학년 여학생"></option>
+                            <option value="2학년"></option>
+                            <option value="2학년 남학생"></option>
+                            <option value="2학년 여학생"></option>
+                            <option value="2학년"></option>
+                            <option value="3학년 남학생"></option>
+                            <option value="3학년 여학생"></option>
+                            <option value="타학교 학생"></option>
+                        </datalist>
+                    </div>
+                </div>
+
+                <div class="m-36" style="margin-top: 102px;"></div>
+
+                <div>
+                    <h1 class="float-left">레이아웃</h1>
+                </div>
+                <div style="margin-top: 62px;">
+                    <p class="float-left" style="margin-top: 8px;">“다음 페이지에서 이어집니다” 문구 표시</p>
+                    <div style="float: right; display: flex;">
+                        <!-- 토글버튼 -->
+                        <label class="switch" onchange="nextpost()">
+                            <input type="checkbox"/>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+                <div style="margin-top: 110px;">
+                    <span><p class="float-left" style="margin-top: 8px;">썸네일 레이아웃 적용</p></span>
+                    <span>
+                        <div class="input-122"> 
+                            <textarea id="date" oninput='printdate()' type="text" class="input-msg" placeholder="날짜 입력" onkeydown="return event.key !== 'Enter';"></textarea>
+                        </div>
+                    </span>
+                    <div style="float: right; display: flex;">
+                        <!-- 토글버튼 -->
+                        <label class="switch" id="covertogglebtn" onchange="togglecover()">
+                            <input type="checkbox"/>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="m-36" style="margin-top: 163px;"></div>
+
+                <div>
+                    <h1 class="float-left">저장하기</h1>
+                </div>
+                <div id="save" class="btn-save">jpeg로 저장</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
